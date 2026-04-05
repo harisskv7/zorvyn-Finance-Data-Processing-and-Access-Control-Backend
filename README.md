@@ -3,6 +3,7 @@
 > Live App (Vercel): https://finance-backend-zeta.vercel.app  
 > Swagger Docs: https://finance-backend-zeta.vercel.app/api/docs  
 > Health Endpoint: https://finance-backend-zeta.vercel.app/api/health
+
 > demo video screenreconding: https://drive.google.com/file/d/1dO-xjIN2JKBr5VeD4x2nJdU63Y8l4qlK/view?usp=sharing
 
 ## Project Overview
@@ -177,10 +178,6 @@ Current automated tests cover:
 - Uses `api/index.js` as serverless entry and `vercel.json` routing.
 - `JWT_SECRET` is configured in Vercel environment.
 - SQLite defaults to `/tmp/finance.db` on Vercel (ephemeral storage).
-
-### Render (Included)
-- `render.yaml` is included for Render deployment.
-- Render is preferred when persistent SQLite disk storage is required.
 
 ## Architecture Snapshot
 ```text
