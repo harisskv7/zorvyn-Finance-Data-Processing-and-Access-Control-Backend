@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zorvyn Finance Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-bg"></div>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="brand-wrap">
+        <p class="brand-label">ZORVYN</p>
+        <h1 class="brand-title">Finance Console</h1>
+      </div>
+
+      <nav class="nav" aria-label="Main navigation">
+        <button class="nav-link active" data-section="overview">Overview</button>
+        <button class="nav-link" data-section="records">Records</button>
+        <button class="nav-link" data-section="analytics">Analytics</button>
+        <button class="nav-link" data-section="users">Users</button>
+      </nav>
+
+      <button id="open-docs-btn" class="secondary-btn">Open API Docs</button>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div>
+          <p id="status-chip" class="status-chip">Disconnected</p>
+          <h2 id="section-title" class="section-title">Overview</h2>
+        </div>
+
+        <div class="user-area">
+          <div id="whoami" class="whoami">Not signed in</div>
+          <button id="logout-btn" class="danger-btn" hidden>Logout</button>
+        </div>
+      </header>
+
+      <section id="auth-panel" class="panel auth-panel animate-in">
+        <h3>Sign in to Finance Console</h3>
+        <p>Use seeded credentials to access role-based workflows.</p>
+
+        <form id="login-form" class="auth-form">
+          <label>
+            Email
+            <input id="email" type="email" placeholder="admin@zorvyn.com" required />
+          </label>
+          <label>
+            Password
+            <input id="password" type="password" placeholder="Admin@123" required />
+          </label>
+          <button type="submit" class="primary-btn">Sign in</button>
+        </form>
+
+        <div class="credential-hint">
+          <strong>Demo:</strong>
+          <span>admin@zorvyn.com / Admin@123</span>
+          <span>analyst@zorvyn.com / Analyst@123</span>
+          <span>viewer@zorvyn.com / Viewer@123</span>
+        </div>
+      </section>
+
+      <section id="app-panel" hidden>
+        <section id="overview-section" class="section-block">
+          <div class="kpi-grid">
+            <article class="kpi-card animate-in">
+              <p>Total Income</p>
+              <h3 id="kpi-income">0</h3>
+            </article>
+            <article class="kpi-card animate-in">
+              <p>Total Expenses</p>
+              <h3 id="kpi-expenses">0</h3>
+            </article>
+            <article class="kpi-card animate-in">
+              <p>Net Balance</p>
+              <h3 id="kpi-balance">0</h3>
+            </article>
+            <article class="kpi-card animate-in">
+              <p>Record Count</p>
+              <h3 id="kpi-count">0</h3>
+            </article>
+          </div>
+
+          <div class="panel table-panel animate-in">
+            <div class="panel-head">
+              <h3>Recent Transactions</h3>
+              <button id="refresh-overview-btn" class="secondary-btn">Refresh</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Created By</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="records-section" class="section-block" hidden>
+          <div class="panel animate-in">
+            <div class="panel-head">
+              <h3>Financial Records</h3>
+              <div class="panel-actions">
+                <button id="refresh-records-btn" class="secondary-btn">Refresh</button>
+                <button id="new-record-btn" class="primary-btn" hidden>New Record</button>
+              </div>
+            </div>
+
+            <form id="record-filter-form" class="filter-grid">
+              <label>
+                Type
+                <select id="filter-type">
+                  <option value="">All</option>
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
+                </select>
+              </label>
+              <label>
+                Category
+                <input id="filter-category" type="text" placeholder="salary" />
+              </label>
+              <label>
+                From
+                <input id="filter-from" type="date" />
+              </label>
+              <label>
+                To
+                <input id="filter-to" type="date" />
+              </label>
+              <div class="filter-actions">
+                <button type="submit" class="secondary-btn">Apply</button>
+                <button type="button" id="clear-filters-btn" class="ghost-btn">Clear</button>
+              </div>
+            </form>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Notes</th>
+                    <th>Created By</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="records-body"></tbody>
+              </table>
+            </div>
+
+            <div class="pager">
+              <button id="prev-page-btn" class="secondary-btn">Prev</button>
+              <span id="records-page-meta">Page 1</span>
+              <button id="next-page-btn" class="secondary-btn">Next</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="analytics-section" class="section-block" hidden>
+          <div class="panel animate-in">
+            <div class="panel-head">
+              <h3>Category Breakdown</h3>
+              <button id="refresh-analytics-btn" class="secondary-btn">Refresh</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Total Income</th>
+                    <th>Total Expenses</th>
+                    <th>Net</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody id="category-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel table-panel animate-in">
+            <div class="panel-head">
+              <h3>Trends</h3>
+              <select id="trend-period">
+                <option value="monthly">Monthly</option>
+                <option value="weekly">Weekly</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Period</th>
+                    <th>Income</th>
+                    <th>Expenses</th>
+                    <th>Net</th>
+                    <th>Count</th>
+                  </tr>
+                </thead>
+                <tbody id="trends-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="users-section" class="section-block" hidden>
+          <div class="panel animate-in">
+            <div class="panel-head">
+              <h3>User Administration</h3>
+              <button id="refresh-users-btn" class="secondary-btn">Refresh</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="users-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="record-dialog" class="record-dialog">
+    <form id="record-form" class="record-form" method="dialog">
+      <h3 id="record-form-title">New Record</h3>
+
+      <input type="hidden" id="record-id" />
+
+      <label>
+        Amount
+        <input id="record-amount" type="number" min="0.01" step="0.01" required />
+      </label>
+
+      <label>
+        Type
+        <select id="record-type" required>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+      </label>
+
+      <label>
+        Category
+        <input id="record-category" type="text" required />
+      </label>
+
+      <label>
+        Date
+        <input id="record-date" type="date" required />
+      </label>
+
+      <label>
+        Notes
+        <textarea id="record-notes" rows="3" placeholder="Optional notes"></textarea>
+      </label>
+
+      <div class="dialog-actions">
+        <button type="button" id="cancel-record-btn" class="ghost-btn">Cancel</button>
+        <button type="submit" class="primary-btn">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>
