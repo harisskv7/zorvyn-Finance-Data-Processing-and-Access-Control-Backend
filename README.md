@@ -196,7 +196,6 @@ finance-backend/
 │   ├── app.js
 │   └── server.js
 ├── tests/
-├── render.yaml
 ├── vercel.json
 └── README.md
 ```
